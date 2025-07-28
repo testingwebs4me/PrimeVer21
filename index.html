@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIME by Asma - Catering & Food Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #231F20;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Arabic font support */
+        body[lang="ar"] {
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Language Toggle Button */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(35, 31, 32, 0.9);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #231F20;
+            border-color: #231F20;
+            transform: scale(1.05);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #231F20, #404040);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(35, 31, 32, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-to-top:hover {
+            background: linear-gradient(135deg, #404040, #231F20);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 25px rgba(35, 31, 32, 0.4);
+        }
+
+        .scroll-to-top:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        /* Arrow styling */
+        .scroll-to-top::before {
+            content: '↑';
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        /* RTL positioning for Arabic */
+        body[lang="ar"] .scroll-to-top {
+            right: auto;
+            left: 30px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(35, 31, 32, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        body[lang="ar"] .nav-container {
+            flex-direction: row-reverse;
+        }
+
+        .nav-logo {
+            display: block;
+            height: 90px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        body[lang="ar"] .nav-links {
+            flex-direction: row-reverse;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: white;
+            color: #231F20;
+            border-color: white;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-mobile-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 120px;
+            left: 0;
+            right: 0;
+            background: rgba(35, 31, 32, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        body[lang="ar"] .mobile-menu ul {
+            text-align: center;
+        }
+
+        .mobile-menu ul li {
+            margin: 1rem 0;
+        }
+
+        .mobile-menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 1rem;
+            display: block;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu ul li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Picture Gallery Landing - ADJUSTED HEIGHTS */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 85vh; /* Reduced from 100vh for desktop */
+            margin-top: 120px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .gallery-slider {
+            display: flex;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Gallery overlay with content */
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .gallery-content {
+            max-width: 800px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .gallery-content h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        body[lang="ar"] .gallery-content h1 {
+            letter-spacing: 4px;
+        }
+
+        .gallery-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Gallery Navigation Arrows */
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 20px;
+            z-index: 10;
+        }
+
+        .gallery-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-nav.prev {
+            left: 30px;
+        }
+
+        .gallery-nav.next {
+            right: 30px;
+        }
+
+        body[lang="ar"] .gallery-nav.prev {
+            right: 30px;
+            left: auto;
+        }
+
+        body[lang="ar"] .gallery-nav.next {
+            left: 30px;
+            right: auto;
+        }
+
+        /* Gallery Dots Indicator */
+        .gallery-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Services Section */
+        .services {
+            padding: 8rem 0;
+            background: #FFFFFF;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 4rem;
+            color: #231F20;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #231F20, #D1D3D4);
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6rem;
+            gap: 4rem;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .service-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .service-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .service-item:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        body[lang="ar"] .service-item {
+            flex-direction: row-reverse;
+        }
+
+        body[lang="ar"] .service-item:nth-child(even) {
+            flex-direction: row;
+        }
+
+        .service-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        body[lang="ar"] .service-content {
+            text-align: right;
+        }
+
+        .service-image {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(35, 31, 32, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .service-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .service-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #231F20;
+            font-weight: 600;
+        }
+
+        .service-content p {
+            margin-bottom: 1.5rem;
+            color: #666;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .service-features {
+            list-style: none;
+        }
+
+        .service-features li {
+            padding: 0.5rem 0;
+            color: #555;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        body[lang="ar"] .service-features li {
+            padding-left: 0;
+            padding-right: 1.5rem;
+        }
+
+        .service-features li::before {
+            content: '•';
+            color: #231F20;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        body[lang="ar"] .service-features li::before {
+            left: auto;
+            right: 0;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #231F20;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .contact p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-text {
+            font-size: 1.1rem;
+        }
+
+        /* WhatsApp SVG Icon Styling */
+        .whatsapp-icon {
+            width: 24px;
+            height: 24px;
+            fill: #25D366;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .service-item {
+                gap: 2rem;
+            }
+
+            .gallery-content h1 {
+                font-size: 3rem;
+            }
+
+            .gallery-content p {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Scroll to Top Button Mobile */
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
+            }
+
+            .scroll-to-top::before {
+                font-size: 18px;
+            }
+
+            body[lang="ar"] .scroll-to-top {
+                right: auto;
+                left: 20px;
+            }
+
+            /* Language Toggle Mobile - Better positioning */
+            .language-toggle {
+                position: static;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                margin: 0;
+            }
+
+            .language-toggle:hover {
+                background: rgba(255, 255, 255, 0.3);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.6);
+            }
+
+            /* Navigation Mobile */
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .nav-logo {
+                height: 60px;
+            }
+
+            /* Mobile Menu */
+            .mobile-menu {
+                top: 80px;
+            }
+
+            /* Gallery Mobile - IMPROVED HEIGHT */
+            .gallery-container {
+                margin-top: 80px;
+                height: 80vh; /* Increased from 70vh for better mobile experience */
+            }
+
+            .gallery-content h1 {
+                font-size: 2rem;
+                letter-spacing: 4px;
+                margin-bottom: 0.5rem;
+            }
+
+            body[lang="ar"] .gallery-content h1 {
+                letter-spacing: 2px;
+            }
+
+            .gallery-content p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .gallery-nav.prev {
+                left: 15px;
+            }
+
+            .gallery-nav.next {
+                right: 15px;
+            }
+
+            body[lang="ar"] .gallery-nav.prev {
+                right: 15px;
+                left: auto;
+            }
+
+            body[lang="ar"] .gallery-nav.next {
+                left: 15px;
+                right: auto;
+            }
+
+            .gallery-dots {
+                bottom: 20px;
+            }
+
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            /* Services Mobile */
+            .services {
+                padding: 3rem 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                padding: 0 15px;
+            }
+
+            .service-item {
+                flex-direction: column !important;
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .service-content {
+                padding: 1rem;
+                text-align: center;
+            }
+
+            body[lang="ar"] .service-content {
+                text-align: center;
+            }
+
+            .service-content h3 {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .service-content p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .service-features {
+                text-align: left;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            body[lang="ar"] .service-features {
+                text-align: right;
+            }
+
+            .service-features li {
+                font-size: 0.95rem;
+                padding: 0.4rem 0;
+                padding-left: 2rem;
+            }
+
+            body[lang="ar"] .service-features li {
+                padding-left: 0;
+                padding-right: 2rem;
+            }
+
+            .service-features li::before {
+                left: 0.5rem;
+            }
+
+            body[lang="ar"] .service-features li::before {
+                left: auto;
+                right: 0.5rem;
+            }
+
+            .service-image {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            .service-image img {
+                height: 250px;
+                border-radius: 10px;
+            }
+
+            /* Contact Mobile */
+            .contact {
+                padding: 3rem 0;
+            }
+
+            .contact h2 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+                padding: 0 15px;
+            }
+
+            .contact p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+                padding: 0 15px;
+                line-height: 1.6;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                padding: 0 15px;
+            }
+
+            .contact-item {
+                padding: 1rem 1.5rem;
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .contact-text {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Scroll to Top Button Extra Small Mobile */
+            .scroll-to-top {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .scroll-to-top::before {
+                font-size: 16px;
+            }
+
+            body[lang="ar"] .scroll-to-top {
+                right: auto;
+                left: 15px;
+            }
+
+            .language-toggle {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .nav-logo {
+                height: 50px;
+            }
+
+            .mobile-menu {
+                top: 70px;
+                padding: 1.5rem;
+            }
+
+            /* Gallery Extra Small Mobile - IMPROVED HEIGHT */
+            .gallery-container {
+                margin-top: 70px;
+                height: 75vh; /* Better height for small mobile screens */
+            }
+
+            .gallery-content h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+            }
+
+            .gallery-content p {
+                font-size: 0.9rem;
+            }
+
+            .gallery-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .gallery-nav.prev {
+                left: 10px;
+            }
+
+            .gallery-nav.next {
+                right: 10px;
+            }
+
+            body[lang="ar"] .gallery-nav.prev {
+                right: 10px;
+                left: auto;
+            }
+
+            body[lang="ar"] .gallery-nav.next {
+                left: 10px;
+                right: auto;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .service-content h3 {
+                font-size: 1.4rem;
+            }
+
+            .service-content p {
+                font-size: 0.95rem;
+            }
+
+            .service-features li {
+                font-size: 0.9rem;
+            }
+
+            .contact h2 {
+                font-size: 1.5rem;
+            }
+
+            .contact p {
+                font-size: 0.95rem;
+            }
+
+            .service-image img {
+                height: 200px;
+            }
+        }
+
+        /* Hide content by default and show based on language */
+        .lang-en, .lang-ar {
+            display: none;
+        }
+
+        body[lang="en"] .lang-en {
+            display: block;
+        }
+
+        body[lang="en"] .lang-en.inline {
+            display: inline;
+        }
+
+        body[lang="ar"] .lang-ar {
+            display: block;
+        }
+
+        body[lang="ar"] .lang-ar.inline {
+            display: inline;
+        }
+
+        /* Fix mobile menu language display */
+        .mobile-menu .lang-en,
+        .mobile-menu .lang-ar {
+            display: none;
+        }
+
+        body[lang="en"] .mobile-menu .lang-en {
+            display: block;
+        }
+
+        body[lang="ar"] .mobile-menu .lang-ar {
+            display: block;
+        }
+    </style>
+</head>
+<body lang="en" dir="ltr">
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()" aria-label="Scroll to top"></button>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="https://i.ibb.co/VpqxrBy2/prime-logo-white.png" alt="PRIME Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="#catering" class="lang-en">Catering</a><a href="#catering" class="lang-ar">الضيافة</a></li>
+                <li><a href="#white-label" class="lang-en">White Label</a><a href="#white-label" class="lang-ar">خدمة العلامة البيضاء</a></li>
+                <li><a href="#supplying" class="lang-en">Hotels & Cafés</a><a href="#supplying" class="lang-ar">المقاهي والفنادق</a></li>
+                <li><a href="#contact" class="lang-en">Contact Us</a><a href="#contact" class="lang-ar">تواصل معنا</a></li>
+            </ul>
+            <div class="nav-mobile-right">
+                <button class="language-toggle" onclick="toggleLanguage()">
+                    <span class="lang-en">العربية</span>
+                    <span class="lang-ar">English</span>
+                </button>
+                <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#catering" onclick="closeMobileMenu()" class="lang-en">Catering</a><a href="#catering" onclick="closeMobileMenu()" class="lang-ar">الضيافة</a></li>
+            <li><a href="#white-label" onclick="closeMobileMenu()" class="lang-en">White Label</a><a href="#white-label" onclick="closeMobileMenu()" class="lang-ar">خدمة العلامة البيضاء</a></li>
+            <li><a href="#supplying" onclick="closeMobileMenu()" class="lang-en">Hotels & Cafés</a><a href="#supplying" onclick="closeMobileMenu()" class="lang-ar">المقاهي والفنادق</a></li>
+            <li><a href="#contact" onclick="closeMobileMenu()" class="lang-en">Contact Us</a><a href="#contact" onclick="closeMobileMenu()" class="lang-ar">تواصل معنا</a></li>
+        </ul>
+    </div>
+
+    <!-- Picture Gallery Landing -->
+    <div class="gallery-container" id="home">
+        <div class="gallery-slider" id="gallerySlider">
+            <!-- Slide 1 -->
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop" alt="Catering Service">
+                <div class="gallery-overlay">
+                    <div class="gallery-content">
+                        <h1>PRIME</h1>
+                        <p class="lang-en">Professional Catering & Food Services</p>
+                        <p class="lang-ar">خدمات الطعام والضيافة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1547573854-74d2a71d0826?q=80&w=2070&auto=format&fit=crop" alt="Gourmet Food">
+                <div class="gallery-overlay">
+                    <div class="gallery-content">
+                        <h1 class="lang-en">The Kitchen Behind Your Success</h1>
+                        <h1 class="lang-ar">حنا المطبخ اللي ورا نجاحك!</h1>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1530631673369-bc20fdb32288?q=80&w=2070&auto=format&fit=crop" alt="Fine Dining">
+                <div class="gallery-overlay">
+                    <div class="gallery-content">
+                        <h1 class="lang-en">White Label Services</h1>
+                        <h1 class="lang-ar">خدمة العلامة البيضاء</h1>
+                        <p class="lang-en">Your Brand, Our Expertise</p>
+                        <p class="lang-ar">براندك، خبرتنا</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 4 -->
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop" alt="Event Catering">
+                <div class="gallery-overlay">
+                    <div class="gallery-content">
+                        <h1 class="lang-en">Events & Celebrations</h1>
+                        <h1 class="lang-ar">المناسبات والاحتفالات</h1>
+                        <p class="lang-en">Making Every Moment Memorable</p>
+                        <p class="lang-ar">نخلي كل لحظة لا تُنسى</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 5 -->
+            <div class="gallery-slide">
+                <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?q=80&w=2070&auto=format&fit=crop" alt="Breakfast Spread">
+                <div class="gallery-overlay">
+                    <div class="gallery-content">
+                        <h1 class="lang-en">Hotels & Cafés Supply</h1>
+                        <h1 class="lang-ar">توريد المقاهي والفنادق</h1>
+                        <p class="lang-en">Fresh Daily, Delivered with Care</p>
+                        <p class="lang-ar">طازج يومياً، يوصل بعناية</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <button class="gallery-nav prev" onclick="changeSlide(-1)" aria-label="Previous slide">❮</button>
+        <button class="gallery-nav next" onclick="changeSlide(1)" aria-label="Next slide">❯</button>
+        
+        <!-- Dots Indicator -->
+        <div class="gallery-dots" id="galleryDots"></div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title lang-en">What We Do</h2>
+            <h2 class="section-title lang-ar">خدماتنا</h2>
+            
+            <!-- Catering Services -->
+            <div id="catering" class="service-item">
+                <div class="service-content">
+                    <h3 class="lang-en">Catering Services </h3>
+                    <h3 class="lang-ar">خدمات الضيافة</h3>
+                    
+                    <p class="lang-en">Full-scale food production for any occasion — customized, punctual, and seamless.</p>
+                    <p class="lang-ar">نجهز لك الأكل كامل لأي مناسبة، بطريقة مرتبة، على الوقت، وبشكل يناسب ذوقك.</p>
+                    
+                    <ul class="service-features lang-en">
+                        <li><strong>Corporate Catering:</strong> Daily meals, executive meetings, staff events</li>
+                        <li><strong>Event Catering:</strong> Launches, weddings, private gatherings, VIP functions</li>
+                        <li><strong>Tailored Menus:</strong> Designed around your theme, crowd, or brand</li>
+                    </ul>
+                    
+                    <ul class="service-features lang-ar">
+                        <li><strong>ضيافة الشركات:</strong> وجبات يومية، اجتماعات رسمية، فعاليات للموظفين</li>
+                        <li><strong>ضيافة المناسبات:</strong> حفلات، تجمعات خاصة، مناسبات كبار الشخصيات</li>
+                        <li><strong>منيو مخصص:</strong> مصمم حسب فكرتك وجمهورك وبراندك</li>
+                    </ul>
+                </div>
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0" alt="Catering Services">
+                </div>
+            </div>
+
+            <!-- White Label Manufacturing -->
+            <div id="white-label" class="service-item">
+                <div class="service-content">
+                    <h3 class="lang-en">White Label</h3>
+                    <h3 class="lang-ar">خدمة العلامة البيضاء</h3>
+                    
+                    <p class="lang-en">Have the recipe or the concept? Let us bring it to life — under <strong>your brand name</strong>.</p>
+                    <p class="lang-ar">عندك وصفة أو فكرة؟ حنّا نقدر نطلعها للنور باسم <strong>البراند حقك</strong>.</p>
+                    
+                    <ul class="service-features lang-en">
+                        <li>Full production & packaging, made-to-spec</li>
+                        <li>Ideal for food brands, influencers, and private-label ventures</li>
+                        <li>Confidential, reliable, and ready to scale with you</li>
+                    </ul>
+                    
+                    <ul class="service-features lang-ar">
+                        <li>ننتج ونخصص لك المنتج كامل حسب الطلب</li>
+                        <li>مناسب لأصحاب البراندات الغذائية، المشاهير، والمشاريع الخاصة</li>
+                        <li>نجهز لك منيو على حسب فكرتك ومخصصة لك</li>
+                    </ul>
+                </div>
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1628591667015-652ca2f54d4b" alt="White Label Manufacturing">
+                </div>
+            </div>
+
+            <!-- Supplying Hotels & Cafés -->
+            <div id="supplying" class="service-item">
+                <div class="service-content">
+                    <h3 class="lang-en">Supplying Hotels & Cafés</h3>
+                    <h3 class="lang-ar">خدمة المقاهي والفنادق</h3>
+                    
+                    <p class="lang-en">Baked goods, sweets, and snacks — made daily, delivered fresh.</p>
+                    <p class="lang-ar">حلويات، مخبوزات، وسناكات – طازجة كل يوم وتوصل وهي فرش.</p>
+                    
+                    <ul class="service-features lang-en">
+                        <li>For cafés, hotel lounges, and concept stores</li>
+                        <li>Beautifully made, ready-to-serve items that customers actually buy</li>
+                        <li>Flexible, dependable restocking based on your business volume</li>
+                    </ul>
+                    
+                    <ul class="service-features lang-ar">
+                        <li>نخدم المقاهي، اللوبيات بالفنادق، وبعض المحلات المميزة</li>
+                        <li>منتجات جميلة وجاهزة للتقديم يشتريها الزبائن فعلاً</li>
+                        <li>نوصل لك كميات حسب احتياجك وبشكل منتظم ومرن</li>
+                    </ul>
+                </div>
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff" alt="Supplying Hotels & Cafés">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="lang-en">Let's Work Together</h2>
+            <h2 class="lang-ar">معك من أول خطوة... اطلب الآن</h2>
+            
+            <p class="lang-en">Looking to launch your food line, fuel an event, or stock your café with premium snacks? <strong>We're ready when you are.</strong></p>
+            <p class="lang-ar">تبي تطلق خط منتجات غذائية، تسوي مناسبة، أو تعبي مقهاك بسناكات مميزة؟ <strong>حنا جاهزين متى ما كنت جاهز.</strong></p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📩</span>
+                    <span class="contact-text">Sales@Prime.sa</span>
+                </div>
+                <div class="contact-item">
+                    <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                    </svg>
+                    <a href="https://wa.me/966552651344" target="_blank" style="color: white; text-decoration: none;">
+                        <span class="contact-text lang-en">WhatsApp</span>
+                        <span class="contact-text lang-ar">واتساب</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Gallery variables
+        let currentSlide = 0;
+        const totalSlides = 5;
+
+        // Initialize gallery
+        function initGallery() {
+            createDots();
+            updateDots();
+            // No auto-slide initialization
+        }
+
+        // Create dots for slide indicator
+        function createDots() {
+            const dotsContainer = document.getElementById('galleryDots');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update active dot
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // Change slide function
+        function changeSlide(direction) {
+            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+            updateSlidePosition();
+            updateDots();
+        }
+
+        // Go to specific slide
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlidePosition();
+            updateDots();
+        }
+
+        // Update slide position
+        function updateSlidePosition() {
+            const slider = document.getElementById('gallerySlider');
+            const translateX = currentLanguage === 'ar' ? currentSlide * 100 : -currentSlide * 100;
+            slider.style.transform = `translateX(${translateX}%)`;
+            
+            // Reset animation for current slide content
+            const currentSlideElement = slider.children[currentSlide];
+            const content = currentSlideElement.querySelector('.gallery-content');
+            if (content) {
+                content.style.animation = 'none';
+                setTimeout(() => {
+                    content.style.animation = 'fadeInUp 1.2s ease';
+                }, 100);
+            }
+        }
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        const galleryContainer = document.querySelector('.gallery-container');
+        
+        galleryContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        galleryContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next slide
+                    changeSlide(currentLanguage === 'ar' ? -1 : 1);
+                } else {
+                    // Swipe right - previous slide
+                    changeSlide(currentLanguage === 'ar' ? 1 : -1);
+                }
+            }
+        }
+
+        // Language management
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            const body = document.body;
+            const html = document.documentElement;
+            
+            if (currentLanguage === 'en') {
+                currentLanguage = 'ar';
+                body.setAttribute('lang', 'ar');
+                body.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'ar');
+                html.setAttribute('dir', 'rtl');
+                document.title = 'برايم - خدمات الطعام والضيافة';
+            } else {
+                currentLanguage = 'en';
+                body.setAttribute('lang', 'en');
+                body.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+                document.title = 'PRIME by Asma - Catering & Food Services';
+            }
+            
+            // Update slide position for RTL
+            updateSlidePosition();
+            
+            // Save language preference
+            localStorage.setItem('preferred-language', currentLanguage);
+        }
+
+        // Load saved language preference on page load
+        function loadLanguagePreference() {
+            const savedLanguage = localStorage.getItem('preferred-language');
+            if (savedLanguage && savedLanguage !== currentLanguage) {
+                toggleLanguage();
+            }
+        }
+
+        // Scroll to Top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button based on scroll position
+        function toggleScrollToTopButton() {
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollPosition > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        }
+
+        // Add scroll event listener
+        window.addEventListener('scroll', toggleScrollToTopButton);
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initGallery();
+            loadLanguagePreference();
+        });
+
+        // Prevent initial auto-scroll
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Disable scroll restoration
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        // Block any auto-scrolling on page unload/reload
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            
+            mobileMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            
+            mobileMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const navContainer = document.querySelector('.nav-container');
+            const languageToggle = document.querySelector('.language-toggle');
+            
+            if (!navContainer.contains(event.target) && 
+                !languageToggle.contains(event.target) && 
+                mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Logo click functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.nav-logo').addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToTop();
+            });
+        });
+
+        // Close mobile menu on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Only prevent default for logo/home links
+                    if (href === '#' || href === '#home') {
+                        e.preventDefault();
+                        scrollToTop();
+                        return;
+                    }
+                    
+                    // Allow normal anchor navigation for other links
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const headerOffset = 100; // Account for fixed navigation
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
