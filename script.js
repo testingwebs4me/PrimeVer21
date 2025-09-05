@@ -170,6 +170,7 @@ window.addEventListener('scroll', toggleScrollToTopButton);
 window.addEventListener('DOMContentLoaded', function() {
     initGallery();
     loadLanguagePreference();
+    initVideoPlayer();
     
     // Logo click functionality
     document.querySelector('.nav-logo').addEventListener('click', function(e) {
