@@ -261,11 +261,11 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Picture Gallery Landing - ADJUSTED HEIGHTS */
+        /* Picture Gallery Landing */
         .gallery-container {
             position: relative;
             width: 100%;
-            height: 85vh; /* Reduced from 100vh for desktop */
+            height: 85vh;
             margin-top: 120px;
             overflow: hidden;
             background: #000;
@@ -606,11 +606,6 @@
             fill: #25D366;
         }
 
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: auto;
-        }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .container {
@@ -649,7 +644,7 @@
                 left: 20px;
             }
 
-            /* Language Toggle Mobile - Better positioning */
+            /* Language Toggle Mobile */
             .language-toggle {
                 position: static;
                 background: rgba(255, 255, 255, 0.2);
@@ -688,10 +683,10 @@
                 top: 80px;
             }
 
-            /* Gallery Mobile - IMPROVED HEIGHT */
+            /* Gallery Mobile */
             .gallery-container {
                 margin-top: 80px;
-                height: 80vh; /* Increased from 70vh for better mobile experience */
+                height: 80vh;
             }
 
             .gallery-content h1 {
@@ -888,10 +883,10 @@
                 padding: 1.5rem;
             }
 
-            /* Gallery Extra Small Mobile - IMPROVED HEIGHT */
+            /* Gallery Extra Small Mobile */
             .gallery-container {
                 margin-top: 70px;
-                height: 75vh; /* Better height for small mobile screens */
+                height: 75vh;
             }
 
             .gallery-content h1 {
@@ -956,7 +951,7 @@
             }
         }
 
-        /* Hide content by default and show based on language */
+        /* Language visibility classes */
         .lang-en, .lang-ar {
             display: none;
         }
@@ -1115,7 +1110,7 @@
             <!-- Catering Services -->
             <div id="catering" class="service-item">
                 <div class="service-content">
-                    <h3 class="lang-en">Catering Services </h3>
+                    <h3 class="lang-en">Catering Services</h3>
                     <h3 class="lang-ar">خدمات الضيافة</h3>
                     
                     <p class="lang-en">Full-scale food production for any occasion — customized, punctual, and seamless.</p>
@@ -1223,17 +1218,18 @@
         // Gallery variables
         let currentSlide = 0;
         const totalSlides = 5;
+        let currentLanguage = 'en';
 
         // Initialize gallery
         function initGallery() {
             createDots();
             updateDots();
-            // No auto-slide initialization
         }
 
         // Create dots for slide indicator
         function createDots() {
             const dotsContainer = document.getElementById('galleryDots');
+            dotsContainer.innerHTML = ''; // Clear existing dots
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.createElement('span');
                 dot.className = 'dot';
@@ -1312,8 +1308,6 @@
         }
 
         // Language management
-        let currentLanguage = 'en';
-
         function toggleLanguage() {
             const body = document.body;
             const html = document.documentElement;
@@ -1369,30 +1363,7 @@
             }
         }
 
-        // Add scroll event listener
-        window.addEventListener('scroll', toggleScrollToTopButton);
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            initGallery();
-            loadLanguagePreference();
-        });
-
-        // Prevent initial auto-scroll
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        
-        // Disable scroll restoration
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-
-        // Block any auto-scrolling on page unload/reload
-        window.addEventListener('beforeunload', function() {
-            window.scrollTo(0, 0);
-        });
-
+        // Mobile menu functions
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuToggle = document.querySelector('.mobile-menu-toggle');
@@ -1409,37 +1380,21 @@
             menuToggle.classList.remove('active');
         }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuToggle = document.querySelector('.mobile-menu-toggle');
-            const navContainer = document.querySelector('.nav-container');
-            const languageToggle = document.querySelector('.language-toggle');
-            
-            if (!navContainer.contains(event.target) && 
-                !languageToggle.contains(event.target) && 
-                mobileMenu.classList.contains('active')) {
-                closeMobileMenu();
-            }
-        });
+        // Event listeners
+        window.addEventListener('scroll', toggleScrollToTopButton);
 
-        // Logo click functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initGallery();
+            loadLanguagePreference();
+            
+            // Logo click functionality
             document.querySelector('.nav-logo').addEventListener('click', function(e) {
                 e.preventDefault();
                 scrollToTop();
             });
-        });
 
-        // Close mobile menu on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        });
-
-        // Smooth scrolling for navigation links
-        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for navigation links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
@@ -1466,6 +1421,42 @@
                     }
                 });
             });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const navContainer = document.querySelector('.nav-container');
+            const languageToggle = document.querySelector('.language-toggle');
+            
+            if (!navContainer.contains(event.target) && 
+                !languageToggle.contains(event.target) && 
+                mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close mobile menu on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+
+        // Prevent initial auto-scroll
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Disable scroll restoration
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        // Block any auto-scrolling on page unload/reload
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
         });
     </script>
 </body>
